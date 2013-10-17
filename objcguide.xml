@@ -4,7 +4,7 @@
 
 <p align="right">
 
-Revision 2.36
+Revision 2.59
 </p>
 
 
@@ -109,8 +109,8 @@ Revision 2.36
     Note that this guide is not an Objective-C tutorial. We assume that the
     reader is familiar with the language. If you are new to Objective-C or
     need a refresher, please read
-    <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/index.html">
-      The Objective-C Programming Language
+    <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html">
+      Programming with Objective-C
     </a>.
   </p>
 </CATEGORY>
@@ -129,36 +129,25 @@ Revision 2.36
   </p>
 
 <CODE_SNIPPET>
-    //  Foo.h
-    //  AwesomeProject
-    //
-    //  Created by Greg Miller on 6/13/08.
-    //  Copyright 2008 Google, Inc. All rights reserved.
-    //
-
     #import &lt;Foundation/Foundation.h&gt;
 
     // A sample class demonstrating good Objective-C style. All interfaces,
-    // categories, and protocols (read: all top-level declarations in a header)
-    // MUST be commented. Comments must also be adjacent to the object they're
-    // documenting.
+    // categories, and protocols (read: all non-trivial top-level declarations
+    // in a header) MUST be commented. Comments must also be adjacent to the
+    // object they're documenting.
     //
     // (no blank line between this comment and the interface)
-    @interface Foo : NSObject {
-     @private
-      NSString *bar_;
-      NSString *bam_;
-    }
+    @interface Foo : NSObject
 
     // Returns an autoreleased instance of Foo. See -initWithBar: for details
     // about |bar|.
-    + (id)fooWithBar:(NSString *)bar;
+    + (instancetype)fooWithBar:(NSString *)bar;
 
     // Designated initializer. |bar| is a thing that represents a thing that
     // does a thing.
-    - (id)initWithBar:(NSString *)bar;
+    - (instancetype)initWithBar:(NSString *)bar;
 
-    // Gets and sets |bar_|.
+    // Gets and sets |_bar|.
     - (NSString *)bar;
     - (void)setBar:(NSString *)bar;
 
@@ -177,49 +166,44 @@ Revision 2.36
   </p>
 
   <CODE_SNIPPET>
-    //
-    //  Foo.m
-    //  AwesomeProject
-    //
-    //  Created by Greg Miller on 6/13/08.
-    //  Copyright 2008 Google, Inc. All rights reserved.
-    //
-
     #import "Foo.h"
 
 
-    @implementation Foo
+    @implementation Foo {
+      NSString *_bar;
+      NSString *_foo;
+    }
 
-    + (id)fooWithBar:(NSString *)bar {
+    + (instancetype)fooWithBar:(NSString *)bar {
       return [[[self alloc] initWithBar:bar] autorelease];
     }
 
     // Must always override super's designated initializer.
-    - (id)init {
+    - (instancetype)init {
       return [self initWithBar:nil];
     }
 
-    - (id)initWithBar:(NSString *)bar {
+    - (instancetype)initWithBar:(NSString *)bar {
       if ((self = [super init])) {
-        bar_ = [bar copy];
-        bam_ = [[NSString alloc] initWithFormat:@"hi %d", 3];
+        _bar = [bar copy];
+        _bam = [[NSString alloc] initWithFormat:@"hi %d", 3];
       }
       return self;
     }
 
     - (void)dealloc {
-      [bar_ release];
-      [bam_ release];
+      [_bar release];
+      [_bam release];
       [super dealloc];
     }
 
     - (NSString *)bar {
-      return bar_;
+      return _bar;
     }
 
     - (void)setBar:(NSString *)bar {
-      [bar_ autorelease];
-      bar_ = [bar copy];
+      [_bar autorelease];
+      _bar = [bar copy];
     }
 
     - (BOOL)doWorkWithBlah:(NSString *)blah {
@@ -261,29 +245,14 @@ Revision 2.36
 
   <STYLEPOINT title="Line Length">
     <SUMMARY>
-      Each line of text in your code should try to be at most 80 characters
-      long.
+      The maximum line length for Objective-C and Objective-C++ files is 100
+      columns. Projects may opt to use an 80 column limit for consistency with
+      the C++ style guide.
     </SUMMARY>
     <BODY>
       <p>
-        Strive to keep your code within 80 columns. We realize that Objective C
-        is a verbose language and in some cases it may be more readable to
-        extend slightly beyond 80 columns, but this should definitely be the
-        exception and not commonplace.
-      </p>
-      <p>
-        If a reviewer asks that you reformat a line because they feel it can be
-        fit in 80 columns and still be readable, you should do so.
-      </p>
-      
-      <p>
-        We recognize that this rule is controversial, but so much existing
-        code already adheres to it, and we feel that consistency is
-        important.
-      </p>
-      <p>
-        You can make violations easier to spot in Xcode by going to <i>Xcode
-        &gt; Preferences &gt; Text Editing &gt; Show page guide</i>.
+        You can make violations easier to spot by enabling <i>Preferences &gt;
+        Text Editing &gt; Page guide at column: 100</i> in Xcode.
       </p>
     </BODY>
   </STYLEPOINT>
@@ -321,13 +290,13 @@ Revision 2.36
       </CODE_SNIPPET>
       <p>
         When the first keyword is shorter than the others, indent the later
-        lines by at least four spaces. You can do this by making keywords
-        line up vertically, not aligning colons:
+        lines by at least four spaces, maintaining colon alignment:
       </p>
       <CODE_SNIPPET>
         - (void)short:(GTMFoo *)theFoo
-            longKeyword:(NSRect)theRect
-            evenLongerKeyword:(float)theInterval {
+                  longKeyword:(NSRect)theRect
+            evenLongerKeyword:(float)theInterval
+                        error:(NSError **)theError {
           ...
         }
       </CODE_SNIPPET>
@@ -371,16 +340,20 @@ Revision 2.36
       </BAD_CODE_SNIPPET>
 
       <p>
-        As with declarations and definitions, when the keyword lengths make
-        it impossible to align colons and still have four leading
-        spaces, indent later lines by four spaces and align keywords after the
-        first one, instead of aligning the colons.
+        As with declarations and definitions, when the first keyword is shorter
+        than the others, indent the later lines by at least four spaces,
+        maintaining colon alignment:
       </p>
       <CODE_SNIPPET>
         [myObj short:arg1
-            longKeyword:arg2
-            evenLongerKeyword:arg3];
+                  longKeyword:arg2
+            evenLongerKeyword:arg3
+                        error:arg4];
       </CODE_SNIPPET>
+      <p>
+        Invocations containing inlined <a href="#Blocks">blocks</a> may have
+        their segments left-aligned at a four space indent.
+      </p>
     </BODY>
   </STYLEPOINT>
 
@@ -446,7 +419,7 @@ Revision 2.36
       <CODE_SNIPPET>
         @interface MyProtocoledClass : NSObject&lt;NSWindowDelegate&gt; {
          @private
-          id&lt;MyFancyDelegate&gt; delegate_;
+          id&lt;MyFancyDelegate&gt; _delegate;
         }
         - (void)setDelegate:(id&lt;MyFancyDelegate&gt;)aDelegate;
         @end
@@ -456,9 +429,7 @@ Revision 2.36
 
   <STYLEPOINT title="Blocks">
     <SUMMARY>
-      Blocks are preferred to the target-selector pattern when creating
-      callbacks, as it makes code easier to read. Code inside blocks should be
-      indented four spaces.
+      Code inside blocks should be indented four spaces.
     </SUMMARY>
     <BODY>
       <p>
@@ -483,6 +454,11 @@ Revision 2.36
           between the <code>) {</code> characters.
         </li>
         <li>
+          Invocations containing inlined blocks may have their segments
+          left-aligned at a four-space indent. This helps when invocations
+          contain multiple inlined blocks.
+        </li>
+        <li>
           Two space indents inside blocks are also allowed, but should only
           be used when it's consistent with the rest of the project's code.
         </li>
@@ -500,7 +476,7 @@ Revision 2.36
 
         // Using a block with a C API follows the same alignment and spacing
         // rules as with Objective-C.
-        dispatch_async(fileIOQueue_, ^{
+        dispatch_async(_fileIOQueue, ^{
             NSString* path = [self sessionFilePath];
             if (path) {
               // ...
@@ -535,11 +511,103 @@ Revision 2.36
         void (^largeBlock)(void) = ^{
             // ...
         };
-        [operationQueue_ addOperationWithBlock:largeBlock];
+        [_operationQueue addOperationWithBlock:largeBlock];
+
+        // An example with multiple inlined blocks in one invocation.
+        [myObject doSomethingWith:arg1
+            firstBlock:^(Foo *a) {
+                // ...
+            }
+            secondBlock:^(Bar *b) {
+                // ...
+            }];
       </CODE_SNIPPET>
     </BODY>
   </STYLEPOINT>
 
+  <STYLEPOINT title="Container Literals">
+    <SUMMARY>
+      For projects using Xcode 4.4 or later and clang, the use of container
+      (array and dictionary) literals is encouraged. If split across multiple
+      lines, the contents should be indented two spaces.
+    </SUMMARY>
+    <BODY>
+      <p>
+        If the collection fits on one line, put a single space after the opening
+        and before the closing brackets.
+      </p>
+      <CODE_SNIPPET>
+        NSArray* array = @[ [foo description], @"Another String", [bar description] ];
+
+        NSDictionary* dict = @{ NSForegroundColorAttributeName : [NSColor redColor] };
+      </CODE_SNIPPET>
+      <p>
+        Not:
+      </p>
+      <BAD_CODE_SNIPPET>
+        NSArray* array = @[[foo description], [bar description]];
+
+        NSDictionary* dict = @{NSForegroundColorAttributeName: [NSColor redColor]};
+      </BAD_CODE_SNIPPET>
+
+      <p>
+        If the collection spans more than a single line, place the opening
+        bracket on the same line as the declaration, indent the body by two
+        spaces, and place the closing bracket on a new line that is indented to
+        the same level as the opening bracket.
+      </p>
+      <CODE_SNIPPET>
+        NSArray* array = @[
+          @"This",
+          @"is",
+          @"an",
+          @"array"
+        ];
+
+        NSDictionary* dictionary = @{
+          NSFontAttributeName : [NSFont fontWithName:@"Helvetica-Bold" size:12],
+          NSForegroundColorAttributeName : fontColor
+        };
+      </CODE_SNIPPET>
+
+      <p>
+        For dictionary literals, there should be one space before the colon and
+        at least one space after it (to optionally align the values).
+      </p>
+      <CODE_SNIPPET>
+        NSDictionary* option1 = @{
+          NSFontAttributeName : [NSFont fontWithName:@"Helvetica-Bold" size:12],
+          NSForegroundColorAttributeName : fontColor
+        };
+
+        NSDictionary* option2 = @{
+          NSFontAttributeName :            [NSFont fontWithName:@"Arial" size:12],
+          NSForegroundColorAttributeName : fontColor
+        };
+      </CODE_SNIPPET>
+      <p>
+        The following are all incorrect:
+      </p>
+      <BAD_CODE_SNIPPET>
+        // There should be a space before the colon.
+        NSDictionary* wrong = @{
+          AKey:       @"b",
+          BLongerKey: @"c",
+        };
+
+        // The items should each be on a new line, or the entire expression
+        // should fit on one line.
+        NSDictionary* alsoWrong= @{ AKey : @"a",
+                                    BLongerKey : @"b" };
+
+        // There should be no variable space before the colon, only after.
+        NSDictionary* stillWrong = @{
+          AKey       : @"b",
+          BLongerKey : @"c",
+        };
+      </BAD_CODE_SNIPPET>
+    </BODY>
+  </STYLEPOINT>
 </CATEGORY>
 
 <CATEGORY title="Naming">
@@ -579,7 +647,7 @@ Revision 2.36
   <STYLEPOINT title="File Names">
     <SUMMARY>
       File names should reflect the name of the class implementation that
-      they contain -- including case. Follow the convention that your
+      they contain¡ªincluding case. Follow the convention that your
       
       project
       uses.
@@ -648,16 +716,16 @@ Revision 2.36
         // A typical Objective-C class, using Objective-C naming.
         @interface MyDelegate : NSObject {
          @private
-          int instanceVar_;
-          CrossPlatformAPI* backEndObject_;
+          int _instanceVar;
+          CrossPlatformAPI* _backEndObject;
         }
         - (void)respondToSomething:(id)something;
         @end
         @implementation MyDelegate
         - (void)respondToSomething:(id)something {
           // bridge from Cocoa through our C++ backend
-          instanceVar_ = backEndObject-&gt;DoSomethingPlatformSpecific();
-          NSString* tempString = [NSString stringWithInt:instanceVar_];
+          _instanceVar = _backEndObject-&gt;DoSomethingPlatformSpecific();
+          NSString* tempString = [NSString stringWithFormat:@"%d", _instanceVar];
           NSLog(@"%@", tempString);
         }
         @end
@@ -665,7 +733,7 @@ Revision 2.36
         // The platform-specific implementation of the C++ class, using
         // C++ naming.
         int CrossPlatformAPI::DoSomethingPlatformSpecific() {
-          NSString* temp_string = [NSString stringWithInt:an_instance_var_];
+          NSString* temp_string = [NSString stringWithFormat:@"%d", an_instance_var_];
           NSLog(@"%@", temp_string);
           return [temp_string intValue];
         }
@@ -680,11 +748,10 @@ Revision 2.36
     </SUMMARY>
     <BODY>
       <p>
-        In <em>application-level</em> code, prefixes on class names should
-        generally be avoided. Having every single class with same prefix
-        impairs readability for no benefit. When designing code to be shared
-        across multiple applications, prefixes are acceptable and recommended
-        (e.g. <code>GTMSendMessage</code>).
+         When designing code to be shared across multiple applications,
+         prefixes are acceptable and recommended (e.g. <code>GTMSendMessage</code>).
+         Prefixes are also recommended for classes of large applications that
+         depend on external libraries.
       </p>
       
     </BODY>
@@ -715,6 +782,18 @@ Revision 2.36
         There should be a single space between the class name and the opening
         parenthesis of the category.
       </p>
+      <CODE_SNIPPET>
+        // Extending a framework class:
+        @interface NSString (GTMStringParsingAdditions)
+        - (NSString *)gtm_foobarString;
+        @end
+
+        // Making your methods and properties private:
+        @interface FoobarViewController ()
+        @property(nonatomic, retain) NSView *dongleView;
+        - (void)performLayout;
+        @end
+      </CODE_SNIPPET>
     </BODY>
   </STYLEPOINT>
 
@@ -752,11 +831,8 @@ Revision 2.36
   <STYLEPOINT title="Variable Names">
     <SUMMARY>
       Variables names start with a lowercase and use mixed case to delimit
-      words. Class member variables have trailing underscores. For example:
-      <var>myLocalVariable</var>, <var>myInstanceVariable_</var>. Members
-      used for KVO/KVC bindings may begin with a leading underscore
-      <i>iff</i> use of Objective-C 2.0's <code>@property</code> isn't
-      allowed.
+      words. Instance variables have leading underscores. For example:
+      <var>myLocalVariable</var>, <var>_myInstanceVariable</var>.
     </SUMMARY>
     <BODY>
       <SUBSECTION title="Common Variable Names">
@@ -786,15 +862,13 @@ Revision 2.36
 
       <SUBSECTION title="Instance Variables">
         <p>
-          Instance variables are mixed case and should be suffixed with a
-          trailing underscore, e.g. <var>usernameTextField_</var>. However,
-          we permit an exception when binding to a member variable using
-          KVO/KVC and Objective-C 2.0 cannot be used (due to OS release
-          constraints). In this case, it is acceptable to prefix the variable
-          with an underscore, per Apple's accepted practices for key/value
-          naming. If Objective-C 2.0 can be used, <code>@property</code> and
-          <code>@synthesize</code> provide a solution that conforms to the
-          naming guidelines.
+          Instance variables are mixed case and should be prefixed with an
+          underscore e.g. <var>_usernameTextField</var>. Note that historically
+          the convention was to put the underscore at the end of the name, and
+          projects may opt to continue using trailing underscores in new code
+          in order to maintain consistency within their codebase (see the
+          Historical Notes section).  It is recommended you leave old
+          code as-is, unless doing so would create inconsistency within a class.
         </p>
       </SUBSECTION>
 
@@ -802,8 +876,20 @@ Revision 2.36
         <p>
           Constant names (#defines, enums, const local variables, etc.) should
           start with a lowercase <var>k</var> and then use mixed case to
-          delimit words, i.e. <var>kInvalidHandle</var>,
-          <var>kWritePerm</var>.
+          delimit words.  For example:
+        </p>
+        <CODE_SNIPPET>
+          const int kNumberOfFiles = 12;
+          NSString *const kUserKey = @"kUserKey";
+          enum DisplayTinge {
+            kDisplayTingeGreen = 1,
+            kDisplayTingeBlue = 2
+          };
+        </CODE_SNIPPET>
+        <p>
+          Because Objective-C does not provide namespacing, constants with global
+          scope should have an appropriate prefix to minimize the chance of name
+          collision, typically like <var>kClassNameFoo</var>.
         </p>
       </SUBSECTION>
     </BODY>
@@ -825,7 +911,7 @@ Revision 2.36
     When writing your comments, write for your audience: the next
     
     contributor
-    who will need to understand your code.  Be generous &#8212; the next
+    who will need to understand your code.  Be generous¡ªthe next
     one may be you!
   </p>
   <p>
@@ -835,36 +921,24 @@ Revision 2.36
 
   <STYLEPOINT title="File Comments">
     <SUMMARY>
-      Start each file with a basic description of the contents of the file,
-      followed by an author, and then followed by a copyright notice and/or
-      license boilerplate.
+      A file may optionally start with a description of its contents.
     </SUMMARY>
     <BODY>
-      <SUBSECTION title="Legal Notice and Author Line">
-        
-        
-        <p>
-          Every file should contain the following items, in order:
-          <ul>
-            <li>a basic description of the contents of the file</li>
-            <li>an author line</li>
-            <li>a copyright statement (for example,
-                <code>Copyright 2008 Google Inc.</code>)</li>
-            <li>license boilerplate if neccessary. Choose the appropriate
-                boilerplate for the license used by the project (e.g.
-                Apache 2.0, BSD, LGPL, GPL)</li>
-          </ul>
-        </p>
-        <p>
-          If you make significant changes to a file that someone else
-          originally wrote, add yourself to the author line. This can
-          be very helpful when another
-          
-          contributor
-          has questions about the file and needs to know whom to contact
-          about it.
-        </p>
-      </SUBSECTION>
+      
+      <p>
+        Every file should contain the following items, in order:
+        <ul>
+          <li>license boilerplate if neccessary. Choose the appropriate
+              boilerplate for the license used by the project (e.g.
+              Apache 2.0, BSD, LGPL, GPL).</li>
+          <li>a basic description of the contents of the file if necessary.</li>
+        </ul>
+      </p>
+      <p>
+        If you make significant changes to a file with an author line,
+        consider deleting the author line since revision history already
+        provides a more detailed and accurate record of authorship.
+      </p>
     </BODY>
   </STYLEPOINT>
 
@@ -932,48 +1006,51 @@ Revision 2.36
       outside the most common Objective-C usage idioms.
     </SUMMARY>
     <BODY>
-      <p>
-        Instance variables which are pointers to objects derived from NSObject
-        are presumed to be retained, and should be either commented as weak or
-        declared with the <b>__weak</b> lifetime qualifier when applicable.
-        Similarly, declared properties must specify a <b>weak</b> or
-        <b>assign</b> property attribute if they are not retained by the
-        class.  An exception is instance variables labeled as IBOutlets in Mac
-        software, which are presumed to not be retained.
-      </p>
-      <p>
-        Where instance variables are pointers to CoreFoundation, C++, and
-        other non-Objective-C objects, they should always be declared with
-        the __strong and __weak type modifiers to indicate which pointers are
-        and are not retained. CoreFoundation and other non-Objective-C object
-        pointers require explicit memory management, even when building for
-        automatic reference counting or garbage collection. When the __weak
-        type modifier is not allowed (e.g. C++ member variables when compiled
-        under clang), a comment should be used instead.
-      </p>
-      <p>
-        Be mindful that support for automatic C++ objects encapsulated in
-        Objective-C objects is disabled by default, as described <a href="http://chanson.livejournal.com/154253.html">here</a>.
-      </p>
-      <p>
-        Examples of strong and weak declarations:
-        <CODE_SNIPPET>
-          @interface MyDelegate : NSObject {
-           @private
-            IBOutlet NSButton *okButton_;  // normal NSControl; implicitly weak on Mac only
+      <SUBSECTION title="Manual Reference Counting">
+        <p>
+          Instance variables which are pointers to objects derived from NSObject
+          are presumed to be retained, and should be either commented as weak or
+          declared with the <b>__weak</b> lifetime qualifier when applicable.
+          Similarly, declared properties must specify an <b>assign</b> property
+          attribute if they are not retained by the class.  An exception is
+          instance variables labeled as IBOutlets in desktop Mac software,
+          which are presumed to not be retained.
+        </p>
+        <p>
+          Where instance variables are pointers to Core Foundation, C++, and
+          other non-Objective-C objects, they should always be declared with
+          <code>strong</code> and <code>weak</code> comments to indicate which
+          pointers are and are not retained. Core Foundation and other
+          non-Objective-C object pointers require explicit memory management,
+          even when building for automatic reference counting or garbage
+          collection.
+        </p>
+        <p>
+          Examples of strong and weak declarations:
+          <CODE_SNIPPET>
+            @interface MyDelegate : NSObject {
+             @private
+              IBOutlet NSButton *_okButton;  // Normal NSControl; implicitly weak on Mac only
 
-            AnObjcObject* doohickey_;  // my doohickey
-            __weak MyObjcParent *parent_;  // so we can send msgs back (owns me)
+              AnObjcObject* _doohickey;  // My doohickey
+              __weak MyObjcParent *_parent;  // So we can send msgs back (owns me)
 
-            // non-NSObject pointers...
-            __strong CWackyCPPClass *wacky_;  // some cross-platform object
-            __strong CFDictionaryRef *dict_;
-          }
-          @property(strong, nonatomic) NSString *doohickey;
-          @property(weak, nonatomic) NSString *parent;
-          @end
-        </CODE_SNIPPET>
-      </p>
+              // non-NSObject pointers...
+              CWackyCPPClass *_wacky;  // Strong, some cross-platform object
+              CFDictionaryRef *_dict;  // Strong
+            }
+            @property(strong, nonatomic) NSString *doohickey;
+            @property(weak, nonatomic) NSString *parent;
+            @end
+          </CODE_SNIPPET>
+        </p>
+      </SUBSECTION>
+      <SUBSECTION title="Automatic Reference Counting">
+        <p>
+          Object ownership and lifetime are explicit when using ARC, so no
+          additional comments are required.
+        </p>
+      </SUBSECTION>
     </BODY>
   </STYLEPOINT>
 
@@ -981,19 +1058,18 @@ Revision 2.36
 
 <CATEGORY title="Cocoa and Objective-C Features">
 
-  <STYLEPOINT title="Member Variables Should Be @private">
+  <STYLEPOINT title="Instance Variables In Headers Should Be @private">
     <SUMMARY>
-      Member variables should be declared <code>@private</code>.
+      Instance variables should typically be declared in implementation files
+      or auto-synthesized by properties.  When ivars are declared in a header
+      file, they should be marked <code>@private</code>.
     </SUMMARY>
     <BODY>
       <CODE_SNIPPET>
         @interface MyClass : NSObject {
          @private
-          id myInstanceVariable_;
+          id _myInstanceVariable;
         }
-        // public accessors, setter takes ownership
-        - (id)myInstanceVariable;
-        - (void)setMyInstanceVariable:(id)theVar;
         @end
       </CODE_SNIPPET>
     </BODY>
@@ -1036,11 +1112,16 @@ Revision 2.36
       <code>@implementation</code>.
     </SUMMARY>
     <BODY>
-      This commonly applies (but is not limited) to the <code>init...</code>,
-      <code>copyWithZone:</code>, and <code>dealloc</code> methods.
-      <code>init...</code> methods should be grouped together, followed by
-      the <code>copyWithZone:</code> method, and finally the
-      <code>dealloc</code> method.
+      <p>
+        This commonly applies (but is not limited) to the <code>init...</code>,
+        <code>copyWithZone:</code>, and <code>dealloc</code> methods.
+        <code>init...</code> methods should be grouped together, followed by
+        other <code>NSObject</code> methods.
+      </p>
+      <p>
+        Convenience class methods for creating instances may precede the
+        <code>NSObject</code> methods.
+      </p>
     </BODY>
   </STYLEPOINT>
 
@@ -1083,7 +1164,7 @@ Revision 2.36
     <BODY>
       <p>
         Unlike C++, Objective-C doesn't have a way to differentiate between
-        public and private methods &#8212; everything is public. As a result,
+        public and private methods¡ªeverything is public. As a result,
         avoid placing methods in the public API unless they are actually
         expected to be used by a consumer of the class. This helps reduce the
         likelihood they'll be called when you're not expecting it. This includes
@@ -1092,14 +1173,13 @@ Revision 2.36
         file as opposed to adding them to the public header.
       </p>
       <CODE_SNIPPET>
-        // GTMFoo.m
         #import "GTMFoo.h"
 
         @interface GTMFoo (PrivateDelegateHandling)
         - (NSString *)doSomethingWithDelegate;  // Declare private method
         @end
 
-        @implementation GTMFoo(PrivateDelegateHandling)
+        @implementation GTMFoo (PrivateDelegateHandling)
         ...
         - (NSString *)doSomethingWithDelegate {
           // Implement this method
@@ -1107,14 +1187,6 @@ Revision 2.36
         ...
         @end
       </CODE_SNIPPET>
-      <p>
-        Before Objective-C 2.0, if you declare a method in the private
-        <code>@interface</code>, but forget to implement it in the main
-        <code>@implementation</code>, the compiler will <i>not</i> object.
-        (This is because you don't implement these private methods in a
-        separate category.) The solution is to put the functions within
-        an <code>@implementation</code> that specifies the category.
-      </p>
       <p>
         If you are using Objective-C 2.0, you should instead declare your
         private category using a <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_4_section_5.html#">class
@@ -1263,8 +1335,8 @@ Revision 2.36
       </p>
       <CODE_SNIPPET>
         - (void)setFoo:(GMFoo *)aFoo {
-          [foo_ autorelease];  // Won't dealloc if |foo_| == |aFoo|
-          foo_ = [aFoo retain];
+          [_foo autorelease];  // Won't dealloc if |_foo| == |aFoo|
+          _foo = [aFoo retain];
         }
       </CODE_SNIPPET>
     </BODY>
@@ -1285,21 +1357,21 @@ Revision 2.36
         accessors.
       </p>
       <CODE_SNIPPET>
-        - (id)init {
+        - (instancetype)init {
           self = [super init];
           if (self) {
-            bar_ = [[NSMutableString alloc] init];  // good
+            _bar = [[NSMutableString alloc] init];  // good
           }
           return self;
         }
 
         - (void)dealloc {
-          [bar_ release];                           // good
+          [_bar release];                           // good
           [super dealloc];
         }
       </CODE_SNIPPET>
       <BAD_CODE_SNIPPET>
-        - (id)init {
+        - (instancetype)init {
           self = [super init];
           if (self) {
             self.bar = [NSMutableString string];  // avoid
@@ -1352,8 +1424,8 @@ Revision 2.36
       </p>
       <CODE_SNIPPET>
         - (void)setFoo:(NSString *)aFoo {
-          [foo_ autorelease];
-          foo_ = [aFoo copy];
+          [_foo autorelease];
+          _foo = [aFoo copy];
         }
       </CODE_SNIPPET>
     </BODY>
@@ -1373,62 +1445,6 @@ Revision 2.36
         you do use them please document exactly which methods you expect to
         throw.
       </p>
-      <p>
-        Do not use the <code>NS_DURING</code>, <code>NS_HANDLER</code>,
-        <code>NS_ENDHANDLER</code>, <code>NS_VALUERETURN</code> and
-        <code>NS_VOIDRETURN</code> macros unless you are writing code that
-        needs to run on Mac OS X 10.2 or before.
-      </p>
-      <p>
-        Also be aware when writing Objective-C++ code that stack based objects
-        are <b>not</b> cleaned up when you throw an Objective-C exception.
-        Example:
-      </p>
-      <CODE_SNIPPET>
-        class exceptiontest {
-         public:
-          exceptiontest() { NSLog(@"Created"); }
-          ~exceptiontest() { NSLog(@"Destroyed"); }
-        };
-
-        void foo() {
-          exceptiontest a;
-          NSException *exception = [NSException exceptionWithName:@"foo"
-                                                           reason:@"bar"
-                                                         userInfo:nil];
-          @throw exception;
-        }
-
-        int main(int argc, char *argv[]) {
-          GMAutoreleasePool pool;
-          @try {
-            foo();
-          }
-          @catch(NSException *ex) {
-            NSLog(@"exception raised");
-          }
-          return 0;
-        }
-      </CODE_SNIPPET>
-      <p>
-        will give you:
-      </p>
-      <CODE_SNIPPET>
-        2006-09-28 12:34:29.244 exceptiontest[23661] Created
-        2006-09-28 12:34:29.244 exceptiontest[23661] exception raised
-      </CODE_SNIPPET>
-      <p>
-        Note that the destructor for <i>a</i> never got called. This is a
-        major concern for stack based smartptrs such as
-        <code>shared_ptr</code> and <code>linked_ptr</code>, as well as any
-        STL objects that you may want to use. Therefore it pains us to say
-        that if you must use exceptions in your Objective-C++ code, use C++
-        exceptions whenever possible. You should never re-throw an Objective-C
-        exception, nor are stack based C++ objects (such as
-        <code>std::string</code>, <code>std::vector</code> etc.) allowed in
-        the body of any <code>@try</code>, <code>@catch</code>, or
-        <code>@finally</code> blocks.
-      </p>
     </BODY>
   </STYLEPOINT>
 
@@ -1439,19 +1455,24 @@ Revision 2.36
     </SUMMARY>
     <BODY>
       <p>
-        Use <code>nil</code> checks for logic flow of the application, not for
-        crash prevention. Sending a message to a <code>nil</code> object is
-        handled by the Objective-C runtime. If the method has no return
-        result, you're good to go. However if there is one, there may be
-        differences based on runtime architecture, return size, and OS X
-        version (see <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_2_section_3.html#//apple_ref/doc/uid/TP30001163-CH11-SW7">Apple's
-        documentation</a> for specifics).
+        Use <code>nil</code> pointer checks for logic flow of the application,
+        not for preventing crashes when sending messages. With current compilers
+        (<a href="http://www.sealiesoftware.com/blog/archive/2012/2/29/objc_explain_return_value_of_message_to_nil.html">
+        as of LLVM 3.0/Xcode 4.2</a>), sending a message to <code>nil</code>
+        reliably returns nil as a pointer, zero as an integer or floating-point
+        value, structs initialized to 0, and <code>_Complex</code> values equal
+        to {0, 0}.
       </p>
       <p>
-        Note that this is very different from checking C/C++ pointers against
-        <code>NULL</code>, which the runtime does not handle and will cause
-        your application to crash. You still need to make sure you do not
-        dereference a <code>NULL</code> pointer.
+        Note that this applies to <code>nil</code> as a message target, not as
+        a parameter value. Individual methods may or may not safely handle
+        <code>nil</code> parameter values.
+      </p>
+      <p>
+        Note too that this is distinct from checking C/C++ pointers and block
+        pointers against <code>NULL</code>, which the runtime does not handle
+        and will cause your application to crash. You still need to make sure
+        you do not dereference a <code>NULL</code> pointer.
       </p>
     </BODY>
   </STYLEPOINT>
@@ -1463,16 +1484,16 @@ Revision 2.36
     </SUMMARY>
     <BODY>
       <p>
-        <code>BOOL</code> is defined as an unsigned char in Objective-C which
-        means that it can have values other than <code>YES</code> (1) and
+        <code>BOOL</code> is defined as a signed char in Objective-C which means
+        that it can have values other than <code>YES</code> (1) and
         <code>NO</code> (0). Do not cast or convert general integral values
         directly to <code>BOOL</code>. Common mistakes include casting or
         converting an array's size, a pointer value, or the result of a bitwise
         logic operation to a <code>BOOL</code> which, depending on the value of
         the last byte of the integral result, could still result in a
         <code>NO</code> value. When converting a general integral value to a
-        <code>BOOL</code> use ternery operators to return a <code>YES</code>
-        or <code>NO</code> value.
+        <code>BOOL</code> use ternery operators to return a <code>YES</code> or
+        <code>NO</code> value.
       </p>
       <p>
         You can safely interchange and convert <code>BOOL</code>,
@@ -1529,58 +1550,54 @@ Revision 2.36
 
   <STYLEPOINT title="Properties">
     <SUMMARY>
-      Properties in general are allowed with the following caveat: properties
-      are an Objective-C 2.0 feature which will limit your code to running
-      on the iPhone and Mac OS X 10.5 (Leopard) and higher. Dot notation
+      Use of the @property directive is preferred, with the following caveat:
+      properties are an Objective-C 2.0 feature which will limit your code to
+      running on the iPhone and Mac OS X 10.5 (Leopard) and higher. Dot notation
       is allowed only for access to a declared <code>@property</code>.
     </SUMMARY>
     <BODY>
       <SUBSECTION title="Naming">
         <p>
           A property's associated instance variable's name must conform to the
-          trailing _ requirement. The property's name should be the same as its
-          associated instance variable without the trailing _. The optional
-          space between the <code>@property</code> and the opening parenthesis
+          leading _ requirement. The property's name should be the same as its
+          associated instance variable without the leading _. The optional space
+          between the <code>@property</code> and the opening parenthesis
           should be omitted, as seen in the examples.
-        </p>
-        <p>
-          Use the @synthesize directive to rename the property correctly.
         </p>
 
         <CODE_SNIPPET>
-          @interface MyClass : NSObject {
-           @private
-            NSString *name_;
-          }
+          @interface MyClass : NSObject
           @property(copy, nonatomic) NSString *name;
           @end
 
           @implementation MyClass
-          @synthesize name = name_;
+          // No code required for auto-synthesis, else use:
+          //   @synthesize name = _name;
           @end
         </CODE_SNIPPET>
       </SUBSECTION>
       <SUBSECTION title="Location">
         <p>
           A property's declaration must come immediately after the instance
-          variable block of a class interface. A property's definition must
-          come immediately after the <code>@implementation</code> block in a
-          class definition. They are indented at the same level as the
-          <code>@interface</code> or <code>@implementation</code> statements
-          that they are enclosed in.
+          variable block of a class interface. A property's definition (if
+          not using automatic synthesis) must come immediately after the
+          <code>@implementation</code> block in a class definition. They are
+          indented at the same level as the <code>@interface</code> or
+          <code>@implementation</code> statements that they are enclosed in.
         </p>
         <CODE_SNIPPET>
           @interface MyClass : NSObject {
            @private
-            NSString *name_;
+            NSString *_name;
           }
           @property(copy, nonatomic) NSString *name;
           @end
 
           @implementation MyClass
-          @synthesize name = name_;
-          - (id)init {
-          ...
+          @synthesize name = _name;
+
+          - (instancetype)init {
+            ...
           }
           @end
         </CODE_SNIPPET>
@@ -1649,19 +1666,20 @@ Revision 2.36
   <STYLEPOINT title="Automatically Synthesized Instance Variables">
     <SUMMARY>
       <p>
-        For code that will run on iOS only, use of automatically synthesized
-        instance variables is preferred.
-      </p>
-      <p>
-        When synthesizing the instance variable, use
-        <code>@synthesize var = var_;</code> as this prevents accidentally calling
-        <code>var = blah;</code> when <code>self.var = blah;</code> is intended.
+        Use of automatically synthesized instance variables is preferred.  Code
+        that must support earlier versions of the compiler toolchain (Xcode 4.3
+        or earlier or when compiling with GCC) or is using properties inherited
+        from a protocol should prefer the @synthesize directive.
       </p>
     </SUMMARY>
     <BODY>
       <CODE_SNIPPET>
         // Header file
-        @interface Foo : NSObject
+        @protocol Thingy
+        @property(nonatomic, copy) NSString *widgetName;
+        @end
+
+        @interface Foo : NSObject&lt;Thingy&gt;
         // A guy walks into a bar.
         @property(nonatomic, copy) NSString *bar;
         @end
@@ -1672,10 +1690,93 @@ Revision 2.36
         @end
 
         @implementation Foo
-        @synthesize bar = bar_;
-        @synthesize baz = baz_;
+        @synthesize widgetName = _widgetName;
         @end
       </CODE_SNIPPET>
+
+      <p>
+        Automatically synthesized instance variables take the form of the
+        property's name prefixed with an underscore and so typically conform to
+        the required variable naming style.  If your property name is unusual,
+        or you are otherwise unable to use automatically synthesized instance
+        variables, use of the @synthesize directive is preferred, with the
+        instance variable name specified explicitly (as @synthesize does not add
+        a leading underscore by default).
+      </p>
+  </BODY>
+  </STYLEPOINT>
+
+  <STYLEPOINT title="Automatic Reference Counting (ARC)">
+    <SUMMARY>
+      <p>
+        For projects that use Xcode 4.2 or later and will run only on 64-bit
+        Mac OS X 10.7 and iOS 5.0 and later, ARC is preferred. Use manual
+        reference counting when supporting earlier environments where zeroing
+        weak pointers are not available.
+      </p>
+      <p>
+        Classes that require ARC should include a preprocessor directive to
+        prevent compilation using manual reference counting.
+      </p>
+      <p>
+        Ownership qualifiers like <code>__unsafe_unretained</code> and
+        <code>__weak</code> should precede variable names. Specifying
+        <code>__strong</code> for variables is not required since it is
+        the default. Properties, on the other hand, should always specify the
+        <code>strong</code> keyword rather than relying on the compiler default.
+      </p>
+      <p>
+        Files that are compiled using ARC need to have preprocessor directives
+        to prevent compilation without ARC. See the code snippet below for
+        details.
+      </p>
+    </SUMMARY>
+    <BODY>
+      <p>
+        Example of an implementation file enforcing ARC style. Note that
+        declaring instance variables in the @implementation is permitted when
+        using ARC.
+        <CODE_SNIPPET>
+          #if !defined(__has_feature) || !__has_feature(objc_arc)
+          #error "This file requires ARC support."
+          #endif
+
+          #import "Foo.h"
+
+          @implementation Foo {
+            Bar* __weak _bar;
+            Baz* __unsafe_unretained _baz;
+          }
+          // ...
+          @end
+        </CODE_SNIPPET>
+      </p>
+    </BODY>
+  </STYLEPOINT>
+
+  <STYLEPOINT title="NSNumber Literals">
+    <SUMMARY>
+      <p>
+        For projects that use Xcode 4.4 or later with clang, the use of
+        <a href="http://clang.llvm.org/docs/ObjectiveCLiterals.html">NSNumber literals</a>
+        is allowed. Note however that this will limit the portability of your
+        code to other toolchains.
+      </p>
+      </SUMMARY>
+    <BODY>
+      <p>
+        NSNumber literals are used just like Objective C string literals.
+        Boxing is used when necessary. Code using NSNumber literals can be
+        deployed on any iOS/MacOS system.
+        <CODE_SNIPPET>
+          NSNumber *fortyTwo = @42;
+          NSNumber *piOverTwo = @(M_PI / 2);
+          enum {
+            kMyEnum = 2;
+          };
+          NSNumber *myEnum = @(kMyEnum);
+        </CODE_SNIPPET>
+      </p>
     </BODY>
   </STYLEPOINT>
 </CATEGORY>
@@ -1685,14 +1786,15 @@ Revision 2.36
 
   <STYLEPOINT title="Delegate Pattern">
     <SUMMARY>
-      Delegate objects should not be retained.
+      Delegate objects should not be retained when doing so would create
+      a retain cycle.
     </SUMMARY>
     <BODY>
       <p>
-        A class that implements the delegate pattern should:
+        A class that implements the delegate pattern should typically:
         <ol>
           <li>
-            Have an instance variable named <var>delegate_</var> to reference
+            Have an instance variable named <var>_delegate</var> to reference
             the delegate.
           </li>
           <li>
@@ -1700,7 +1802,9 @@ Revision 2.36
             and <code>setDelegate:</code>.
           </li>
           <li>
-            The <var>delegate_</var> object should <b>not</b> be retained.
+            The <var>_delegate</var> object should be weak if the class
+            is typically retained by its delegate, such that a strong delegate
+            would create a retain cycle.
           </li>
         </ol>
       </p>
@@ -1733,10 +1837,31 @@ Revision 2.36
           <li>
             Define callback APIs with <code>@protocol</code>, using
             <code>@optional</code> if not all the methods are required.
-            (Exception: when using Objective-C 1.0, <code>@optional</code> isn't
-            available, so use a category to define an "informal protocol".)
           </li>
         </ul>
+      </p>
+    </BODY>
+  </STYLEPOINT>
+
+</CATEGORY>
+
+<CATEGORY title="Historical Notes">
+
+  <STYLEPOINT title="Trailing vs Leading Underscores">
+    <SUMMARY>
+      Trailing underscores were once preferred for instance variable names.
+    </SUMMARY>
+    <BODY>
+      <p>
+        Our style guide used to have a rule saying that instance variables
+        should be named with a trailing underscore, similar to the naming of
+        member variables in C++.  This was changed to leading underscores to
+        be consistent with the broader Objective-C community, to better follow
+        Apple's official guidelines, and to allow for use of new compiler
+        features like automatic instance variable synthesis. New projects are
+        strongly encouraged to use leading underscores. Existing projects may
+        continue to use trailing underscores in new code to maintain
+        consistency with the rest of their codebase.
       </p>
     </BODY>
   </STYLEPOINT>
@@ -1746,7 +1871,7 @@ Revision 2.36
 <HR/>
 
 <p align="right">
-Revision 2.36
+Revision 2.59
 </p>
 
 
