@@ -96,7 +96,7 @@
              <code>boolean</code>) are constant values.</p>
 
            <p><code>Objects</code>'
-             immutability is more subjective â€” objects should be
+             immutability is more subjective ¡ª objects should be
              considered immutable only if they do not demonstrate observable
              state change.  This is not enforced by the compiler.</p>
 
@@ -464,7 +464,7 @@
 
     <STYLEPOINT title="eval()">
       <SUMMARY>
-        Only for code loaders and REPL (Readâ€“evalâ€“print loop)
+        Only for code loaders and REPL (Read¨Ceval¨Cprint loop)
       </SUMMARY>
       <BODY>
         <p><code>eval()</code> makes for confusing semantics and is dangerous
@@ -2501,7 +2501,7 @@
 
                   <p>When <code>@const</code> is applied to a method, it
                     implies the method is not only not overwritable, but also
-                    that the method is <em>finalized</em> â€”
+                    that the method is <em>finalized</em> ¡ª
                     not overridable in subclasses.</p>
 
                   <p>For more on <code>@const</code>, see the

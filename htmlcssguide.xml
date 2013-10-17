@@ -13,12 +13,20 @@
           This style guide contains many details that are initially
           hidden from view. They are marked by the triangle icon, which you
           see here on your left. Click it now.
+<<<<<<< HEAD
           You should see â€œHoorayâ€ appear below.
+=======
+          You should see “Hooray” appear below.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </SUMMARY>
         <BODY>
           <p>
             Hooray! Now you know you can expand points to get more
+<<<<<<< HEAD
             details. Alternatively, thereâ€™s a â€œtoggle allâ€ at the
+=======
+            details. Alternatively, there’s a “toggle all” at the
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
             top of this document.
           </p>
         </BODY>
@@ -52,8 +60,13 @@
           files are not available over both protocols.
         </p>
         <p>
+<<<<<<< HEAD
           Omitting the protocolâ€”which makes the URL
           relativeâ€”prevents mixed content issues and results in
+=======
+          Omitting the protocol—which makes the URL
+          relative—prevents mixed content issues and results in
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           minor file size savings.
         </p>
         <BAD_CODE_SNIPPET>
@@ -88,7 +101,11 @@
       </SUMMARY>
       <BODY>
         <p>
+<<<<<<< HEAD
           Donâ€™t use tabs or mix tabs and spaces for indentation.
+=======
+          Don’t use tabs or mix tabs and spaces for indentation.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </p>
         <CODE_SNIPPET>
           &lt;ul&gt;
@@ -189,7 +206,11 @@
           (This item is optional as it is not deemed a realistic
           expectation to always demand fully documented code. Mileage
           may vary heavily for HTML and CSS code and depends on the
+<<<<<<< HEAD
           projectâ€™s complexity.)
+=======
+          project’s complexity.)
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </p>
       </BODY>
     </STYLEPOINT>
@@ -238,7 +259,11 @@
           <code>&lt;!DOCTYPE html&gt;</code>.
         </p>
         <p>
+<<<<<<< HEAD
           (Itâ€™s recommended to use HTML, as <code>text/html</code>. Do not use
+=======
+          (It’s recommended to use HTML, as <code>text/html</code>. Do not use
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           XHTML. XHTML, as <a href="http://hixie.ch/advocacy/xhtml"><code>application/xhtml+xml</code></a>,
           lacks both browser and infrastructure support and offers
           less room for optimization than HTML.)
@@ -288,7 +313,11 @@
       </SUMMARY>
       <BODY>
         <p>
+<<<<<<< HEAD
           Use elements (sometimes incorrectly called â€œtagsâ€) for what
+=======
+          Use elements (sometimes incorrectly called “tags”) for what
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           they have been created for. For example, use heading
           elements for headings, <code>p</code> elements for
           paragraphs, <code>a</code> elements for anchors, etc.
@@ -381,9 +410,15 @@
           &lt;link rel="stylesheet" href="grid.css" media="screen"&gt;
           &lt;link rel="stylesheet" href="print.css" media="print"&gt;
           &lt;h1 style="font-size: 1em;"&gt;HTML sucks&lt;/h1&gt;
+<<<<<<< HEAD
           &lt;p&gt;Iâ€™ve read about this on a few sites but now Iâ€™m sure:
             &lt;u&gt;HTML is stupid!!1&lt;/u&gt;
           &lt;center&gt;I canâ€™t believe thereâ€™s no way to control the styling of
+=======
+          &lt;p&gt;I’ve read about this on a few sites but now I’m sure:
+            &lt;u&gt;HTML is stupid!!1&lt;/u&gt;
+          &lt;center&gt;I can’t believe there’s no way to control the styling of
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
             my website without doing everything all over again!&lt;/center&gt;
         </BAD_CODE_SNIPPET>
         <CODE_SNIPPET>
@@ -392,10 +427,17 @@
           &lt;title&gt;My first CSS-only redesign&lt;/title&gt;
           &lt;link rel="stylesheet" href="default.css"&gt;
           &lt;h1&gt;My first CSS-only redesign&lt;/h1&gt;
+<<<<<<< HEAD
           &lt;p&gt;Iâ€™ve read about this on a few sites but today Iâ€™m actually
             doing it: separating concerns and avoiding anything in the HTML of
             my website that is presentational.
           &lt;p&gt;Itâ€™s awesome!
+=======
+          &lt;p&gt;I’ve read about this on a few sites but today I’m actually
+            doing it: separating concerns and avoiding anything in the HTML of
+            my website that is presentational.
+          &lt;p&gt;It’s awesome!
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </CODE_SNIPPET>
       </BODY>
     </STYLEPOINT>
@@ -414,7 +456,11 @@
         <p>
           The only exceptions apply to characters with special meaning
           in HTML (like <code>&lt;</code> and <code>&amp;</code>) as
+<<<<<<< HEAD
           well as control or â€œinvisibleâ€ characters (like no-break
+=======
+          well as control or “invisible” characters (like no-break
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           spaces).
         </p>
         <BAD_CODE_SNIPPET>
@@ -423,7 +469,11 @@
         </BAD_CODE_SNIPPET>
         <CODE_SNIPPET>
           &lt;!-- Recommended --&gt;
+<<<<<<< HEAD
           The currency symbol for the Euro is â€œâ‚¬â€.
+=======
+          The currency symbol for the Euro is “€”.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </CODE_SNIPPET>
       </BODY>
     </STYLEPOINT>
@@ -440,9 +490,15 @@
         </p>
         <p>
           (This approach may require a grace period to be established
+<<<<<<< HEAD
           as a wider guideline as itâ€™s significantly different
           from what web developers are typically taught. For
           consistency and simplicity reasons itâ€™s best served
+=======
+          as a wider guideline as it’s significantly different
+          from what web developers are typically taught. For
+          consistency and simplicity reasons it’s best served
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           omitting all optional tags, not just a selection.)
         </p>
         <BAD_CODE_SNIPPET>
@@ -524,7 +580,11 @@
         </p>
         <p>
           (If you run into issues around whitespace between list items
+<<<<<<< HEAD
           itâ€™s acceptable to put all <code>li</code> elements in one
+=======
+          it’s acceptable to put all <code>li</code> elements in one
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           line. A linter is encouraged to throw a warning instead of
           an error.)
         </p>
@@ -615,7 +675,11 @@
         <p>
           Generic names are simply a fallback for elements that have no
           particular or no meaning different from their siblings. They are
+<<<<<<< HEAD
           typically needed as â€œhelpers.â€
+=======
+          typically needed as “helpers.”
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         </p>
         <p>
           Using functional or generic names reduces the probability of
@@ -728,7 +792,11 @@
     </STYLEPOINT>
     <STYLEPOINT title="0 and Units">
       <SUMMARY>
+<<<<<<< HEAD
         Omit unit specification after â€œ0â€ values.
+=======
+        Omit unit specification after “0” values.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
       </SUMMARY>
       <BODY>
         <p>
@@ -743,7 +811,11 @@
     </STYLEPOINT>
     <STYLEPOINT title="Leading 0s">
       <SUMMARY>
+<<<<<<< HEAD
         Omit leading â€œ0â€s in values.
+=======
+        Omit leading “0”s in values.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
       </SUMMARY>
       <BODY>
         <p>
@@ -809,7 +881,11 @@
           in order to improve understanding and scannability.
         </p>
         <BAD_CODE_SNIPPET>
+<<<<<<< HEAD
           /* Not recommended: does not separate the words â€œdemoâ€ and â€œimageâ€ */
+=======
+          /* Not recommended: does not separate the words “demo” and “image” */
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           .demoimage {}
 
           /* Not recommended: uses underscore instead of hyphen */
@@ -824,12 +900,20 @@
     </STYLEPOINT>
     <STYLEPOINT title="Hacks">
       <SUMMARY>
+<<<<<<< HEAD
         Avoid user agent detection as well as CSS â€œhacksâ€â€”try a different
+=======
+        Avoid user agent detection as well as CSS “hacks”—try a different
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
         approach first.
       </SUMMARY>
       <BODY>
         <p>
+<<<<<<< HEAD
           Itâ€™s tempting to address styling differences over user
+=======
+          It’s tempting to address styling differences over user
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           agent detection or special CSS filters, workarounds, and
           hacks. Both approaches should be considered last resort in
           order to achieve and maintain an efficient and manageable
@@ -837,7 +921,11 @@
           free pass will hurt projects in the long run as projects
           tend to take the way of least resistance. That is, allowing
           and making it easy to use detection and hacks means using
+<<<<<<< HEAD
           detection and hacks more frequentlyâ€”and more frequently
+=======
+          detection and hacks more frequently—and more frequently
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           is too frequently.
         </p>
         
@@ -923,7 +1011,11 @@
     </STYLEPOINT>
     <STYLEPOINT title="Property Name Stops">
       <SUMMARY>
+<<<<<<< HEAD
         Use a space after a property nameâ€™s colon.
+=======
+        Use a space after a property name’s colon.
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
       </SUMMARY>
       <BODY>
         <p>
@@ -1035,7 +1127,11 @@
         </p>
         <p>
           Exception: If you do need to use the <code>@charset</code> rule,
+<<<<<<< HEAD
           use double quotation marksâ€”<a href="http://www.w3.org/TR/CSS21/syndata.html#charset">single
+=======
+          use double quotation marks—<a href="http://www.w3.org/TR/CSS21/syndata.html#charset">single
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
           quotation marks are not permitted</a>.
         </p>
         <BAD_CODE_SNIPPET>
@@ -1093,7 +1189,11 @@
       <em>Be consistent.</em>
     </p>
     <p>
+<<<<<<< HEAD
       If youâ€™re editing code, take a few minutes to look at the code
+=======
+      If you’re editing code, take a few minutes to look at the code
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
       around you and determine its style. If they use spaces around
       all their arithmetic operators, you should too. If their
       comments have little boxes of hash marks around them, make your
@@ -1101,8 +1201,13 @@
     </p>
     <p>
       The point of having style guidelines is to have a common vocabulary
+<<<<<<< HEAD
       of coding so people can concentrate on what youâ€™re saying rather
       than on how youâ€™re saying it. We present global style rules here so
+=======
+      of coding so people can concentrate on what you’re saying rather
+      than on how you’re saying it. We present global style rules here so
+>>>>>>> 02f630dd3095902bd7fdb97c2086b7bffa7ec717
       people know the vocabulary, but local style is also important. If
       code you add to a file looks drastically different from the existing
       code around it, it throws readers out of their rhythm when they go to

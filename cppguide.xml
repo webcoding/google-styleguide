@@ -364,7 +364,7 @@ Tashana Landray
       </p>
       <ol>
         <li> <code><var>dir2/foo2</var>.h</code> (preferred location
-          â€” see details below).</li>
+          ¡ª see details below).</li>
         <li> C system files.</li>
         <li> C++ system files.</li>
         <li> Other libraries' <code>.h</code> files.</li>
@@ -854,8 +854,8 @@ Tashana Landray
         defined to be the reverse of the order in which the constructors
         were called.  Since constructor order is indeterminate, so is
         destructor order.  For example, at program-end time a static
-        variable might have been destroyed, but code still running â€”
-        perhaps in another thread â€” tries to access it and fails.  Or
+        variable might have been destroyed, but code still running ¡ª
+        perhaps in another thread ¡ª tries to access it and fails.  Or
         the destructor for a static <code>string</code> variable might be
         run prior to the destructor for another variable that contains a
         reference to that string.
@@ -3085,7 +3085,7 @@ Tashana Landray
           auto x(3);  // Note: parentheses.
           auto y{3};  // Note: curly braces.
         </CODE_SNIPPET>
-        mean different things â€” <code>x</code> is
+        mean different things ¡ª <code>x</code> is
         an <code>int</code>, while <code>y</code> is
         an <code>initializer_list</code>. The same applies to other
         normally-invisible proxy types.
@@ -3373,7 +3373,7 @@ Tashana Landray
       </p>
       <p>
         As with <a href="#Boost">Boost</a>, some C++11 extensions encourage
-        coding practices that hamper readabilityâ€”for example by removing
+        coding practices that hamper readability¡ªfor example by removing
         checked redundancy (such as type names) that may be helpful to readers,
         or by encouraging template metaprogramming.  Other extensions
         duplicate functionality available through existing
@@ -3535,8 +3535,8 @@ Tashana Landray
     </SUMMARY>
     <BODY>
       <p>
-        The names of all types â€” classes, structs, typedefs, and enums
-        â€” have the same naming convention.  Type names should start
+        The names of all types ¡ª classes, structs, typedefs, and enums
+        ¡ª have the same naming convention.  Type names should start
         with a capital letter and have a capital letter for each new
         word.  No underscores.  For example:
       </p>
@@ -3807,7 +3807,7 @@ Tashana Landray
     When writing your comments, write for your audience: the next
     
     contributor
-    who will need to understand your code.  Be generous â€” the next
+    who will need to understand your code.  Be generous ¡ª the next
     one may be you!
   </p>
 
@@ -4345,7 +4345,7 @@ Tashana Landray
       </p>
       <p>
         Hex encoding is also OK, and encouraged where it enhances
-        readability â€” for example, <code>"\xEF\xBB\xBF"</code>,
+        readability ¡ª for example, <code>"\xEF\xBB\xBF"</code>,
         or, even more simply, <code>u8"\uFEFF"</code>, is the
         Unicode zero-width no-break space character, which would be
         invisible if included in the source as straight UTF-8.
